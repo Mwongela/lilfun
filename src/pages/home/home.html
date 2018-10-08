@@ -1,14 +1,16 @@
 <ion-header>
   <ion-navbar>
     <ion-title>
-      Ionic Blank
+      Menus
     </ion-title>
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
-  The world is your oyster.
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will be your guide.
-  </p>
+<ion-content>
+  <ion-list>
+    <button *ngFor="let menu of data" ion-item detail-none (click)="openMenuDetail(menu)">
+      {{ menu.title }}
+      <ion-badge item-end>{{ menu.locationItems.length }}</ion-badge>
+    </button>
+  </ion-list>
 </ion-content>
