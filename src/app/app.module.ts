@@ -8,6 +8,10 @@ import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import {MenuDetailPage} from "../pages/menu-detail/menu-detail";
 import {BackgroundGeolocation} from "@ionic-native/background-geolocation";
+import {InAppBrowser} from "@ionic-native/in-app-browser";
+import {Media} from "@ionic-native/media";
+import {MusicControls} from "@ionic-native/music-controls";
+import { NetworkProvider } from '../providers/network/network';
 
 @NgModule({
   declarations: [
@@ -17,7 +21,7 @@ import {BackgroundGeolocation} from "@ionic-native/background-geolocation";
   ],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(MyApp, {mode: "ios"})
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -29,7 +33,8 @@ import {BackgroundGeolocation} from "@ionic-native/background-geolocation";
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    BackgroundGeolocation
+    BackgroundGeolocation, InAppBrowser, Media, MusicControls,
+    NetworkProvider
   ]
 })
 export class AppModule {}

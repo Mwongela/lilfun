@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-navbar>
+  <ion-navbar color="primary">
     <ion-title>
       Menus
     </ion-title>
@@ -8,9 +8,8 @@
 
 <ion-content>
   <ion-list>
-    <button *ngFor="let menu of data" ion-item detail-none (click)="openMenuDetail(menu)">
-      {{ menu.title }}
-      <ion-badge item-end>{{ menu.locationItems.length }}</ion-badge>
+    <button *ngFor="let menu of data" ion-item detail-push (click)="openMenuDetail(menu)">
+      <h3>{{ menu.title }}</h3>
     </button>
   </ion-list>
 </ion-content>

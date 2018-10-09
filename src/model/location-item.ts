@@ -5,7 +5,6 @@ export interface LocationItem {
   mediaUrl: string,
 
   // More field
-  distanceFromUser: number;
-  isValid: boolean;
-  showPlayer?: boolean;
+  distanceFromUser?: number;
+  isShown?: boolean;
 }
