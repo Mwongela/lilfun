@@ -1,0 +1,16 @@
+page-menu-detail {
+  .toolbar-background {
+    background-color: #ffffff !important;
+  }
+
+  .scroll-content {
+    display: flex!important;
+    align-content: center!important;
+    align-items: center!important;
+
+    h3 {
+      display: block !important;
+      width: 100% !important;
+    }
+  }
+}
