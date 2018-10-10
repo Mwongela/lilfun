@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {IonicPage, NavController, NavParams, Platform} from 'ionic-angular';
+import { NavController, NavParams, Platform} from 'ionic-angular';
 import {LocationItem} from "../../model/location-item";
 import {
   BackgroundGeolocation,
@@ -7,10 +7,8 @@ import {
   BackgroundGeolocationResponse
 } from "@ionic-native/background-geolocation";
 import {Util} from "../../providers/util/util";
-import {InAppBrowser} from "@ionic-native/in-app-browser";
 import * as _ from 'lodash';
-import {Media, MediaObject} from "@ionic-native/media";
-import {MusicControls} from "@ionic-native/music-controls";
+import {LocationItemDetailPage} from "../location-item-detail/location-item-detail";
 
 const config: BackgroundGeolocationConfig = {
   desiredAccuracy: 10,
@@ -38,10 +36,7 @@ export class MenuDetailPage {
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
               private backgroundGeolocation: BackgroundGeolocation,
-              private platform: Platform,
-              private iab: InAppBrowser,
-              private media: Media,
-              private musicControls: MusicControls) {
+              private platform: Platform) {
 
     this.title = `${navParams.get("title")} Active`;
     this.locationItems = navParams.get("locationItems");
@@ -74,7 +69,7 @@ export class MenuDetailPage {
     }, Util.TIMEOUT)
   }
 
-  ionViewCanLeave() {
+  ionViewWillUnload() {
     this.backgroundGeolocation.stop();
   }
 
@@ -90,10 +85,9 @@ export class MenuDetailPage {
     });
 
     if (item) {
-      this.openBrowser(item);
-
       let index = this.locationItems.indexOf(item);
       this.locationItems[index].isShown = true;
+      this.openBrowser(item);
     }
   }
 
@@ -103,68 +97,6 @@ export class MenuDetailPage {
    */
   openBrowser(item: LocationItem) {
 
-    const browser = this.iab.create(item.pageUrl, "_self", "location=yes");
-    const file = this.media.create(item.mediaUrl);
-    browser.on("exit").subscribe(e => {
-      this.isBrowserOpen = false;
-      this.isMediaPlaying = false;
-      if (file) {
-        this.musicControls.destroy();
-        file.stop();
-        file.release();
-      }
-    });
-
-    browser.on("loadstop").subscribe(e => {
-      this.openMediaItem(item, file);
-    });
-    browser.show();
-    this.isBrowserOpen = true;
-  }
-
-  /**
-   * Open media item in the background
-   * @param {LocationItem} item
-   */
-  openMediaItem(item: LocationItem, file: MediaObject) {
-
-    file = this.media.create(item.mediaUrl);
-
-    file.onSuccess.subscribe(() => console.log('Action is successful'));
-    file.onError.subscribe(error => console.log('Error!', error));
-
-    this.musicControls.create({
-      track: item.pageUrl,
-      isPlaying: true,
-      dismissable: true,
-      hasPrev: false,
-      hasNext: false,
-      hasClose: true,
-
-      duration: file.getDuration(),
-      hasSkipBackward: false,
-      hasSkipForward: false
-    });
-
-    this.musicControls.subscribe().subscribe(action => {
-        const message = JSON.parse(action).message;
-        switch (message) {
-          case 'music-controls-pause':
-            file.pause();
-            break;
-          case 'music-controls-play':
-            file.play();
-            break;
-          case 'music-controls-destroy':
-            file.stop();
-            file.release();
-            this.musicControls.destroy();
-            break;
-          default:
-            break;
-        }
-    });
-
-    file.play();
+    this.navCtrl.push(LocationItemDetailPage, item);
   }
 }
